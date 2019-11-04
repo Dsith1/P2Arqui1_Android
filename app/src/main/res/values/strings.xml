@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">P2Arqui1</string>
+    <string name="Bienvenido">Bienvenido</string>
+    <string name="I_Texto">Ingrese Texto</string>
+    <string name="Enviar">Enviar</string>
+    <string name="Ceder">Ceder Control</string>
+</resources>
