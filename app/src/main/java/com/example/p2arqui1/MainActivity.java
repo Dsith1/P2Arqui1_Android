@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                     String entrada = txtentrada.getText().toString();
                     correlativo++;
                     Envio(entrada);
+                }else{
+                    Toast.makeText(getApplicationContext(), "No Tiene Permisos en Este momento", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         VerEstado();
+        Maximo();
 
 
     }
@@ -146,6 +151,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 String prueba=response.body();
+
+                Log.d("good", "goog");
+                Log.d("goog","muestreo");
+
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("fail", "fail");
+                Log.d("fail",t.getMessage());
+            }
+        });
+    }
+
+    private void Maximo(){
+        Retrofit retrofit = new Builder()
+                .baseUrl(Servicio.ruta_api)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Servicio postApi= retrofit.create(Servicio.class);
+        Call<String> call = postApi.maximo();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                correlativo=Integer.parseInt(response.body());
 
                 Log.d("good", "goog");
                 Log.d("goog","muestreo");
