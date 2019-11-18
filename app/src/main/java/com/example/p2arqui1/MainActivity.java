@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     int correlativo=0;
     EditText txtentrada;
+    boolean estado=false;
+    Button btnEnviar;
+    Button btnCeder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,38 +35,68 @@ public class MainActivity extends AppCompatActivity {
 
         txtentrada=(EditText)findViewById(R.id.txtTexto);
 
-        Button btnEnviar = findViewById(R.id.btnEnviar);
+        btnEnviar = findViewById(R.id.btnEnviar);
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String entrada=txtentrada.getText().toString();
-                Envio(entrada);
+                if(estado) {
+                    String entrada = txtentrada.getText().toString();
+                    correlativo++;
+                    Envio(entrada);
+                }
             }
         });
+
+        btnCeder = findViewById(R.id.btnCeder);
+        btnCeder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CambioEstado();
+                if(estado){
+                    estado=false;
+                }else{
+                    estado=true;
+                }
+
+            }
+        });
+
+
+        VerEstado();
+
+
     }
 
 
-
-    private void Envio(String cadena){
+    private void VerEstado(){
         Retrofit retrofit = new Builder()
                 .baseUrl(Servicio.ruta_api)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         Servicio postApi= retrofit.create(Servicio.class);
-        Call<RequestBody> call = postApi.uploadFile(cadena,correlativo);
+        Call<String> call = postApi.Verestado();
 
-
-        call.enqueue(new Callback<RequestBody>() {
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<RequestBody> call, Response<RequestBody> response) {
-                response.body();
-                Log.d("good", "good");
-                Log.d("goog",response.raw().toString());
+            public void onResponse(Call<String> call, Response<String> response) {
+                String prueba=response.body();
+
+                Log.d("good", "goog");
+                Log.d("goog",prueba);
+
+                if(prueba.equals("true")){
+                    estado=true;
+
+                }else{
+                    estado=false;
+
+                }
+
 
             }
             @Override
-            public void onFailure(Call<RequestBody> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Log.d("fail", "fail");
                 Log.d("fail",t.getMessage());
             }
@@ -71,4 +104,61 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void Envio(String cadena){
+        Retrofit retrofit = new Builder()
+                .baseUrl(Servicio.ruta_api)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Dato dato=new Dato(cadena,correlativo);
+
+        Servicio postApi= retrofit.create(Servicio.class);
+        Call<Dato> call = postApi.uploadFile(dato);
+
+
+        call.enqueue(new Callback<Dato>() {
+            @Override
+            public void onResponse(Call<Dato> call, Response<Dato> response) {
+                response.body();
+                Log.d("good", "good");
+                Log.d("goog",response.raw().toString());
+
+            }
+            @Override
+            public void onFailure(Call<Dato> call, Throwable t) {
+                Log.d("fail", "fail");
+                Log.d("fail",t.getMessage());
+            }
+        });
+
+    }
+
+    private void CambioEstado(){
+        Retrofit retrofit = new Builder()
+                .baseUrl(Servicio.ruta_api)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Servicio postApi= retrofit.create(Servicio.class);
+        Call<String> call = postApi.Setestado();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String prueba=response.body();
+
+                Log.d("good", "goog");
+                Log.d("goog","muestreo");
+
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("fail", "fail");
+                Log.d("fail",t.getMessage());
+            }
+        });
+    }
+
 }
+
+
