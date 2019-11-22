@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Dato dato=new Dato(cadena,correlativo);
+        Dato dato=new Dato(cadena,correlativo,0);
 
         Servicio postApi= retrofit.create(Servicio.class);
         Call<Dato> call = postApi.uploadFile(dato);
@@ -176,7 +176,12 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                correlativo=Integer.parseInt(response.body());
+                if(response!=null){
+                    correlativo=Integer.parseInt(response.body());
+                }else{
+                    correlativo=0;
+                }
+
 
                 Log.d("good", "goog");
                 Log.d("goog","muestreo");

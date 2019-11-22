@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 
 public interface Servicio {
 
-    String ruta_api="http://192.168.0.18:3000/datos/";
+    String ruta_api="http://192.168.0.16:3000/datos/";
 
 
     @POST(ruta_api)

@@ -10,8 +10,12 @@ public class Dato {
     @SerializedName("Correlativo")
     int correlativo;
 
-    public Dato(String d, int c){
+    @SerializedName("Leido")
+    int leido;
+
+    public Dato(String d, int c,int l){
         dato=d;
         correlativo=c;
+        leido=l;
     }
 }
