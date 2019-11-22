@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                VerEstado();
                 if(estado) {
                     String entrada = txtentrada.getText().toString();
                     correlativo++;
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 if(estado){
                     estado=false;
                 }else{
-                    estado=true;
+                    Toast.makeText(getApplicationContext(), "No Tiene Permisos en Este momento", Toast.LENGTH_SHORT).show();
+
                 }
 
             }
